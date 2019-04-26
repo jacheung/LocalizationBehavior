@@ -3,7 +3,7 @@
 
 
 
-function [DmatX, DmatY, motorX, renormValues] = designMatrixBuilderv4(V,U,params)
+function [DmatX, DmatY, motorX, renormValues] = designMatrixBuilder_v4(V,U,params)
 
 
 

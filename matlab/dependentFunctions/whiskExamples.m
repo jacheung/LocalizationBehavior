@@ -15,11 +15,11 @@ for i = 1:length(trialnums)
     trialnum = trialnums{i};
 WSTName = [mouseName 'x' sessionName '-' trialnum '_' 'WST' '.mat'];
 load(WSTName)%load file based on trial above to test mask 
-tp = [.6  :.1:1.25 ];
+tp = [.5  1.25 ];
 %%%%%% plot any mask you want use trial number above  
 subplot(1,2,i);
 % ws.plot_fitted_whisker_time_projection(0,'k',tp)
-ws.plot_fitted_whisker_time_projection(0,'color',tp)
+ws.plot_fitted_whisker_time_projection(0,'k',tp)
 hold on; 
 ws.plot_fitted_whisker_ROI_time_projection(0,'r',tp)
 ws.plot_mask(0,'g',tp);

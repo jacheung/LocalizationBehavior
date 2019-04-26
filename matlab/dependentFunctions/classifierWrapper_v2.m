@@ -29,6 +29,8 @@ for rec = 1:length(uberarray)
         
         [numTouches, meanFeature] = preDecisionTouchFeatures(array,preDecisionMask{rec},varx(variableNumber),touchDirection,touchOrder);
  
+        meanFeature = nanmean(meanFeature);
+        
        if variableNumber == 1
             V(rec).touchNum.hit=numTouches(hit); % count number of predecision touches using theta vals
             V(rec).touchNum.miss=numTouches(miss);
