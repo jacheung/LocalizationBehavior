@@ -66,7 +66,7 @@ feature_distribution(BV,V,params)
 %Fig 3E Proportion of go/nogo with touches; 
 proportionTTypeTouch(BV)
 
-%% Fig 4
+%% Fig 4 Looking at proportion of trials with touch|no touch and lick|nolick
 %Can set to look at protraction touches only. However, a couple mice have
 %lots of retraction touches. This will show that mice will lick | no touch.
 trialProportion(BV,'all')
