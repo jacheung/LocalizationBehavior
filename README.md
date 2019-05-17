@@ -1,4 +1,4 @@
-# LocalizationBehavior
+# Precise tactile localization behavior in mouse
 
 ## Premise: 
 Locating objects through the sense of touch is an essential behavior across animal species. In humans and mice, tactile object localization is an active process that combines directed sensor motion with mechanosensory signals. How these motion and sensory signals are combined in the brain to produce tactile perception remains poorly understood. Identifying the motor strategies deployed and the resulting sensorimotor signal features that underlie location perception during these behaviors is an essential step to understanding the algorithms and neural circuit implementations of active sensory perception 
