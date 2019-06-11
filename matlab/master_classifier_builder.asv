@@ -174,7 +174,7 @@ if strcmp(params.classes,'lick')
             all_motors = U{k}.meta.motorPosition; 
             curr_motors = motorXpreds.(pfields{featureSelected}){k}(:,1); 
             ntt_motors = setdiff(all_motors,curr_motors)'; 
-            pad_values = [ntt_motors zeros(length(ntt_motors),1) ones(length(ntt_motors),1) ones(length(ntt_motors),1)*2]; %padding non-touch trials all as 0s meaning non-lick or nogo
+            pad_values = [ntt_motors repmat(zeros(length(ntt_motors),1),1,2) ones(length(ntt_motors),1)*2]; %padding non-touch trials all as 0s meaning non-lick or nogo
             motorXpreds.(pfields{featureSelected}){k} = [motorXpreds.(pfields{featureSelected}){k} ; pad_values];
         end
             

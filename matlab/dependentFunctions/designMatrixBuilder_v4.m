@@ -348,7 +348,7 @@ switch params.classes
         
     case 'lick'
         DmatX = [hx(:,1:size(hx,2)-1); mx(:,1:size(mx,2)-1) ; FAx(:,1:size(FAx,2)-1); CRx(:,1:size(CRx,2)-1)];
-        DmatY = [hy; my.*2; FAy;CRy.*2];
+        DmatY = [hy; my.*2; FAy; CRy.*2];
         motorX = [hx(:,size(hx,2)); mx(:,size(mx,2)) ; FAx(:,size(FAx,2));CRx(:,size(CRx,2))];
         
 end
