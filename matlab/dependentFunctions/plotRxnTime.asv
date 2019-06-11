@@ -52,11 +52,9 @@ for i = 1:length(array)
     rxn_mat(1:length(FA),3) = c_rxn(FA);
     rxn_mat(1:length(CR),4) = c_rxn(CR);
     
-    for g = [1  3 ]
-        hold on; errorbar(g,nanmean(rxn_mat(:,g)),nanstd(rxn_mat(:,g)),[color{g} 'o']);
+    for g = [1 2 3 4]
+        hold on; errorbar(g,nanmean(rxn_mat(:,g)),nanstd(rxn_mat(:,g)) ,[color{g} 'o']);
     end
-    set(gca,'xlim',[0 4],'xtick',[1  3 ],'xticklabel',{'hit','fa'})
-    
-    g_rxnmat{i} = rxn_mat; 
+    set(gca,'xlim',[0 5],'xtick',[1 2 3 4],'xticklabel',{'hit','miss','fa','cr'})
 end
     

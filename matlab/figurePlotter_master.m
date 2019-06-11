@@ -18,7 +18,7 @@ learningCurves(behavioralDataLocation)
 rawPsychometricCurves(BV); 
 
 %Fig 1I ------------------------------------------------------------------
-discriminationPrecision(BV); 
+discrimination_precision(BV); 
 
 %% Fig 2
 %Fig 2A ------------------------------------------------------------------

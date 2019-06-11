@@ -18,7 +18,7 @@ vars = {'kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'
 % vars =  {'phase','amp','midpoint','angle'} %Fig9C
 % vars = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 9 D
 
-vars = {'counts','midpoint','countsmidpoint'};
+vars = {'counts','countsmidpoint','countsangle'};
 
 savedLambdas = nan(length(V),length(vars));
 %%
@@ -112,7 +112,7 @@ for k = 1:length(vars)
                 
                 motorPlick= [motorPlick;motorX(selInds==u) prob(:,1)];
                 motorPlickWithPreds= [motorPlickWithPreds ; motorX(selInds==u) prob pred];
-                txp = [txp ; testY pred];
+                txp = [txp ; motorX(selInds==u) testY pred];
             end
         end  
             poptxp{rec} = txp;
@@ -163,7 +163,12 @@ for k = 1:length(vars)
 end
 
 
-% Psychometric Curve Comparison b/t Model and Mouse
+
+
+
+
+
+%% Psychometric Curve Comparison b/t Model and Mouse
 if strcmp(params.classes,'lick')
     pfields = fields(motorXpreds);
     for d = 1:length(pfields)

@@ -4,7 +4,7 @@
 % vs Hitrate. Will only work for continuous uber array.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function discrimination_precision(U)
+function [outputs] = discrimination_precision(U)
 
 
 popA = cell(1,6);
@@ -92,6 +92,10 @@ end
 set(gca,'ytick',[0 .5 1],'xtick',[0 .5 1],'ylim',[0 1]);
 plot([0 1],[0 1],'-k')
 axis square
+
+outputs.means = groupPrecision;
+outputs.errors = cibin;
+
 
 %MATRIX for all pvals 
 pmat = [.5 1 2 3 4 5 ; nan(1,6) ;p ; nan(1,6) ; sum(p<.1) ;sum(p<.05) ; sum(p<.01)]
