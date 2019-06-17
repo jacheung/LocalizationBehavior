@@ -198,20 +198,9 @@ end
 
 x = repmat([1 2]',1,15);
 figure(230);clf
-subplot(1,2,1);
 plot(cell2mat(rsqd(2:3)'),'ko-')
 set(gca,'xlim',[0.5 2.5],'xtick',[1 2],'xticklabel',{'mp+counts','angle+counts'},'ylim',[.7 1])
-ylabel('rsqd b/t model and mouse')
-[~,p] = ttest(rsqd{2},rsqd{3})
-title(['pairedTT p= ' num2str(p)])
-
-subplot(1,2,2);
-plot(cell2mat(mae(2:3)'),'ko-')
-set(gca,'xlim',[0.5 2.5],'xtick',[1 2],'xticklabel',{'mp+counts','angle+counts'},'ylim',[0 .25])
-ylabel('mae b/t model and mouse')
-[~,p] = ttest(mae{2},mae{3})
-title(['pairedTT p= ' num2str(p)])
-
+ylabel('rsqd')
 
 
 % scatter(x(:),cell2mat(mae),'o')
