@@ -14,7 +14,7 @@ overlap = zeros(length(U),1);
 ratio = zeros(length(U),1);
 
 for rec = 1:length(U)
-    [DmatX, DmatY, ~] = designMatrixBuilderv4(V(rec),U{rec},params);
+    [DmatX, DmatY, ~] = designMatrixBuilder_v4(V(rec),U{rec},params);
     nDimX = size(DmatX,2);
     switch nDimX
         case 1
