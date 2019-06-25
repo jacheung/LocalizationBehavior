@@ -60,3 +60,9 @@ for i = 1:length(array)
     g_rxnmat{i} = rxn_mat; 
 end
     
+
+% byTrialType = [mean(cell2mat(cellfun(@nanmedian,g_rxnmat,'uniformoutput',0)')); std(cell2mat(cellfun(@nanmedian,g_rxnmat,'uniformoutput',0)')) ]
+% group = [mean(cellfun(@nanmedian,grxnT)); std(cellfun(@nanmedian,grxnT))]
+% groupv = cellfun(@(x) nanmedian(x(:)),g_rxnmat)
+% cellfun(@(x) sum(~isnan(x)),g_rxnmat,'uniformoutput',0)
+
