@@ -1,4 +1,6 @@
-%%__main__
+%%__main__all analysis below is built off a data structure of 200
+%%consecutive best performing trials in an object localization task. 
+
 close all; clear; clc; 
 %% Load behavioral data matrix 
 behavioralDataLocation = 'C:\Users\jacheung\Dropbox\HLabBackup\Jon\DATA\Behavior\ContLearningCurves';
@@ -21,7 +23,7 @@ rawPsychometricCurves(BV);
 discrimination_precision(BV); 
 
 %% Fig 3
-%Fig 3A heatmap of whisker motion of 200 best trials in session (sorted)
+%Fig 3A heatmap of whisker motion (sorted by motor position)
 %can input mouseNumber to plot or variable number
 %variable number :1) angle, :3) amplitude :4) midpoint :5) phase
 mouseNumber = 9; %paper example mouseNumber 9
@@ -41,6 +43,9 @@ peakProtractionFeature(BV);
 
 %Fig 3E Proportion of go/nogo with touches; 
 proportionTTypeTouch(BV)
+
+%Fig 3F Touch presence classifier vs mouse performance 
+
 
 %Fig 3G Scatter of proportion of licking|no touch and licking|touch 
 trialProportion(BV,'all');% can set all to 'pro' or 'ret' for touch direction
