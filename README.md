@@ -5,7 +5,7 @@ Locating objects through the sense of touch is an essential behavior across anim
 
 Head-fixed rodents are a powerful model to study tactile perception due to the fine level of experimental control. Rodents can perform object location, shape, and texture discrimination using only their whiskers. As they are actively performing, high speed videography and models of whisker physics can be used to extract whisker kinematics. Further, electrophysiology or calcium imaging can be used to observe the brain during behavior. 
 
-In the context of precise object localization, 5 plausible models have been hypothesized over the past decade (see below). We seek in this project to discern the simplest model to provide a foundation for the computation of object location representation in the cortex. 
+In the context of precise object localization, 6 plausible models have been hypothesized over the past decade (see below). We seek in this project to discern the simplest model to provide a foundation for the computation of object location representation in the cortex. 
 
 ![Alt text](./pictures/localization_models.png)
 
