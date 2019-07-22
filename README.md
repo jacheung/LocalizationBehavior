@@ -9,3 +9,7 @@ In the context of precise object localization, 5 plausible models have been hypo
 
 ![Alt text](./pictures/localization_models.png)
 
+## Data Structures: 
+Data structure for Cheung et al. 2019 hosted on Hires Lab Dropbox at (https://www.dropbox.com/s/0oxsc4uix5zd9dl/BV.mat).
+
+
