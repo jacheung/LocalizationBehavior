@@ -1,7 +1,7 @@
 clear
 load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\BV.mat')
 U=BV;
-[V] = classifierWrapper_v2(BV,'pro','all'); %inputs = uberarray | touchDirection | touchOrder
+[V] = classifierWrapper_v2(BV,'all','all'); %inputs = uberarray | touchDirection | touchOrder
 
 %% PARAMETERS SETTING
 clear trueXpreds
@@ -9,16 +9,16 @@ clear motorXpreds
 
 % vars = {'countsBinary','counts'}; %Fig 3 %BUILD WITH ALL TOUCH DIRECTIONS AND NO drop
 % vars = {'countsBinary','counts'}; %Fig 4 %BUILD WITH ALL TOUCH DIRECTIONS AND NO drop
-vars = {'kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %FIG6
+% vars = {'kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %FIG6
 % vars = {'motor','kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %Fig 7
 % vars = {'uberedRadial'}; %for supplemental finding out optimal precision of model 
 
 % Fig 9 and BEYOND PROTRACTION ONLY
 % vars = {'angle','hilbert'} %Fig 7D
 % vars =  {'phase','amp','midpoint','angle'} %Fig9C
-vars = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 9 D
+% vars = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 9 D
 
-% vars = {'counts','countsmidpoint','countsangle'};
+vars = {'counts','countsmidpoint','countsangle'};
 
 savedLambdas = nan(length(V),length(vars));
 %%
@@ -30,7 +30,7 @@ for k = 1:length(vars)
     % 1) 'angle' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
     % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
     % 'timeTotouch','onsetangle','velocity','Ivelocity' OR 'phase','amp','midpoint'
-    params.classes = 'lick';
+    params.classes = 'gonogo';
     % 1) 'gonogo' 2) 'lick'
     
     % Only for 'ubered' or 'hilbert'
@@ -161,7 +161,7 @@ end
 
 
 %% Psychometric Curve Comparison b/t Model and Mouse
-if strcmp(params.classes,'lick')
+
     pfields = fields(motorXpreds);
     for d = 1:length(pfields)
         featureSelected = d;
@@ -186,28 +186,26 @@ if strcmp(params.classes,'lick')
        
         rsqd{d} = cellfun(@(x,y) corr(x,y).^2, real,mdled);
     end
-end
+
 
 x = repmat([1 2]',1,15);
 figure(230);clf
-subplot(1,2,1);
-plot(cell2mat(rsqd(2:3)'),'ko-')
-set(gca,'xlim',[0.5 2.5],'xtick',[1 2],'xticklabel',{'mp+counts','angle+counts'},'ylim',[.7 1])
-ylabel('rsqd b/t model and mouse')
-[~,p] = ttest(rsqd{2},rsqd{3})
-title(['pairedTT p= ' num2str(p)])
+% subplot(1,2,1);
+% plot(cell2mat(rsqd(2:3)'),'ko-')
+% set(gca,'xlim',[0.5 2.5],'xtick',[1 2],'xticklabel',{'mp+counts','angle+counts'},'ylim',[.7 1])
+% ylabel('rsqd b/t model and mouse')
+% [~,p] = ttest(rsqd{2},rsqd{3})
+% title(['pairedTT p= ' num2str(p)])
 
-subplot(1,2,2);
-plot(cell2mat(mae(2:3)'),'ko-')
-set(gca,'xlim',[0.5 2.5],'xtick',[1 2],'xticklabel',{'mp+counts','angle+counts'},'ylim',[0 .25])
+
+plot(cell2mat(mae([1 3 2])'),'ko-')
+set(gca,'xlim',[0.5 3.5],'xtick',[1:3],'xticklabel',{'counts','angle+counts','mp+counts'},'ylim',[0 .4],'ytick',0:.1:.4)
 ylabel('mae b/t model and mouse')
-[~,p] = ttest(mae{2},mae{3})
+[~,p] = ttest(mae{1},mae{2})
 title(['pairedTT p= ' num2str(p)])
 
 
 
-% scatter(x(:),cell2mat(mae),'o')
-% plot(cell2mat(mae(2:3)'),'ko-')
 
 %% Visualization of the decision boundaries.
 colors = {'b','r'};
