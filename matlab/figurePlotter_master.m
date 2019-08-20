@@ -70,6 +70,7 @@ params.dropNonTouch = 'yes';
 
 feature_distribution(BV,V,params)
 
+%uber_mccCalculator 
 
 %% Fig 5
 %Fig A/B Lick probability as a function of touch count 
@@ -78,7 +79,6 @@ touchOrder = 'all';
 numTouchesLickProbability(BV,touchDirection,touchOrder)
 
 %% Fig 6 Radial distance feature isolation task 
-
 
 
 

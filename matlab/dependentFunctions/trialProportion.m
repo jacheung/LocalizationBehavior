@@ -85,7 +85,7 @@ errorbar(nanmean(xnogo),nanmean(ynogo),enogoy,enogoy,nanmean(xnogo),enogox,'line
 set(gca,'xtick',0:.2:1,'ytick',0:.2:1)
 set(gcf,'paperposition',[0 0 4 4])
 axis square
-title('Fig 4a')
+title('Fig 3G')
 
 
 

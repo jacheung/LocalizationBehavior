@@ -1,7 +1,7 @@
 clear
 load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\BV.mat')
 U=BV;
-[V] = classifierWrapper_v2(BV,'all','all'); %inputs = uberarray | touchDirection | touchOrder
+[V] = classifierWrapper_v2(BV,'pro','all'); %inputs = uberarray | touchDirection | touchOrder
 
 %% PARAMETERS SETTING
 clear trueXpreds
@@ -15,10 +15,10 @@ clear motorXpreds
 
 % Fig 9 and BEYOND PROTRACTION ONLY
 % vars = {'angle','hilbert'} %Fig 7D
-% vars =  {'phase','amp','midpoint','angle'} %Fig9C
+vars =  {'phase','amp','midpoint','angle'} %Fig9C
 % vars = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 9 D
 
-vars = {'counts','countsmidpoint','countsangle'};
+% vars = {'counts','countsmidpoint','countsangle'};
 
 savedLambdas = nan(length(V),length(vars));
 %%
@@ -30,7 +30,7 @@ for k = 1:length(vars)
     % 1) 'angle' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
     % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
     % 'timeTotouch','onsetangle','velocity','Ivelocity' OR 'phase','amp','midpoint'
-    params.classes = 'gonogo';
+    params.classes = 'lick';
     % 1) 'gonogo' 2) 'lick'
     
     % Only for 'ubered' or 'hilbert'
