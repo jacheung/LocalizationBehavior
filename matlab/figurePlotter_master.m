@@ -4,7 +4,7 @@
 close all; clear; clc; 
 %% Load behavioral data matrix 
 behavioralDataLocation = 'C:\Users\jacheung\Dropbox\HLabBackup\Jon\DATA\Behavior\ContLearningCurves';
-dataStructLocation = 'C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs';
+dataStructLocation = 'C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication';
 cd(dataStructLocation)
 load('BV.mat')
 [V] = classifierWrapper_v2(BV,'all','all');
@@ -45,7 +45,9 @@ peakProtractionFeature(BV);
 proportionTTypeTouch(BV)
 
 %Fig 3F Touch presence classifier vs mouse performance 
-
+cd(dataStructLocation)
+load('model_3F')
+mcc_scatters(mdl,BV)
 
 %Fig 3G Scatter of proportion of licking|no touch and licking|touch 
 trialProportion(BV,'all');% can set all to 'pro' or 'ret' for touch direction

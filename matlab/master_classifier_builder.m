@@ -1,25 +1,22 @@
 clear
 load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\BV.mat')
-U=BV;
-[V] = classifierWrapper_v2(BV,'pro','all'); %inputs = uberarray | touchDirection | touchOrder
+[V] = classifierWrapper_v2(BV,'all','all'); %inputs = uberarray | touchDirection | touchOrder
 
 %% PARAMETERS SETTING
-clear trueXpreds
-clear motorXpreds
+clearvars -except BV V
 
 % vars = {'countsBinary','counts'}; %Fig 3 %BUILD WITH ALL TOUCH DIRECTIONS AND NO drop
-% vars = {'countsBinary','counts'}; %Fig 4 %BUILD WITH ALL TOUCH DIRECTIONS AND NO drop
-% vars = {'kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %FIG6
+vars = {'kappa','timing','timeTotouch','counts','radialD','angle'}; %FIG4G
 % vars = {'motor','kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %Fig 7
 % vars = {'uberedRadial'}; %for supplemental finding out optimal precision of model 
 
 % Fig 9 and BEYOND PROTRACTION ONLY
 % vars = {'angle','hilbert'} %Fig 7D
-vars =  {'phase','amp','midpoint','angle'} %Fig9C
+% vars =  {'phase','amp','midpoint','angle'}; %Fig9C
 % vars = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 9 D
 
 % vars = {'counts','countsmidpoint','countsangle'};
-
+mdl = []; %starting w/ clean structure 
 savedLambdas = nan(length(V),length(vars));
 %%
 [rc] = numSubplots(length(vars));
@@ -30,7 +27,8 @@ for k = 1:length(vars)
     % 1) 'angle' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
     % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
     % 'timeTotouch','onsetangle','velocity','Ivelocity' OR 'phase','amp','midpoint'
-    params.classes = 'lick';
+    
+    params.classes = 'gonogo';
     % 1) 'gonogo' 2) 'lick'
     
     % Only for 'ubered' or 'hilbert'
@@ -41,13 +39,12 @@ for k = 1:length(vars)
     % 1) 'yes' = drop trials with 0 touches
     % 2) 'no' = keep all trials
     
-    [DmatX, ~, ~] = designMatrixBuilder_v4(V(1),U{1},params);
+    [DmatX, ~, ~] = designMatrixBuilder_v4(V(1),BV{1},params);
     
     %learning parameters
-    learnparam.regMethod = 'lasso';
+    learnparam.regMethod = 'lasso'; % 'lasso' or L1 regularization or 'ridge' or L2 regularization;
     learnparam.lambda = loadLambda;
-    % 1) 'lasso' or L1 regularization;
-    % 2) 'ridge' or L2 regularization;
+
     learnparam.cvKfold = 5;
     learnparam.biasClose = 'no';
     learnparam.distance_round_pole =2; %inmm
@@ -55,31 +52,29 @@ for k = 1:length(vars)
     
     if size(DmatX,2)>1
         if sum(~isnan(savedLambdas(:,k)))==0
-            [optLambda] = optimalLambda(V,U,params,learnparam);
+            [optLambda] = optimalLambda(V,BV,params,learnparam);
             savedLambdas(:,k) = optLambda;
             learnparam.lambda = optLambda;
         else
             learnparam.lambda = savedLambdas(:,k);
         end
     else
-        learnparam.lambda = zeros(1,length(U));
+        learnparam.lambda = zeros(1,length(BV));
     end
     
     %% LOG CLASSIFIER
     
-    accprop=cell(1,length(V));
     for rec = 1:length(V)
+
+        [DmatX, DmatY, motorX] = designMatrixBuilder_v4(V(rec),BV{rec},params); %lick/go = 1, nolick/nogo = 2;
         
         clear opt_thresh
         motorPlick = [];
         motorPlickWithPreds = [];
         txp = [];
         
-        for f = 1:learnparam.numIterations 
-            
+        for f = 1:learnparam.numIterations  
             display(['iteration ' num2str(f) ' for sample ' num2str(rec) ' using optimal lambda ' num2str(learnparam.lambda(rec))])
-            [DmatX, DmatY, motorX] = designMatrixBuilder_v4(V(rec),U{rec},params); %lick/go = 1, nolick/nogo = 2; 
-           
             if strcmp(learnparam.biasClose,'yes')
                 mean_norm_motor = motorX - mean(BV{rec}.meta.ranges);
                 close_trials = find(abs(mean_norm_motor)<learnparam.distance_round_pole*10000);
@@ -114,69 +109,42 @@ for k = 1:length(vars)
                 motorPlickWithPreds= [motorPlickWithPreds ; motorX(selInds==u) prob pred];
                 txp = [txp ; motorX(selInds==u) testY pred];
             end
-        end  
-            poptxp{rec} = txp;
-            train_motorPlick_dual{rec} = motorPlickWithPreds; %used for predHeat
-            train_predOpt(rec)=mean(opt_thresh); %used for dboundaries
+        end
+            mdl.input.(vars{k}).DmatX{rec} = DmatX;
+            mdl.input.(vars{k}).DmatY{rec} = DmatY;
+            mdl.input.(vars{k}).motor{rec} = motorX; 
+            
+            mdl.output.true_preds.(vars{k}){rec} = txp;
+            mdl.output.motor_preds.(vars{k}){rec} = motorPlickWithPreds;
+            mdl.output.decision_boundary(rec) = mean(opt_thresh); %used for dboundaries
     end
     
-    %Raw truths and predictions: use this to calculate MCC, F1 scores,
-    %etc...
-    trueXpreds.(vars{k}) = poptxp;
-    motorXpreds.(vars{k}) = train_motorPlick_dual;
-    
-    %Producing normalized odds ratios to compare weights between
-    %features
-    currWeight = weights.(vars{k});
-    
-    if size(DmatX,2)>1
-        [nor] = ConvertToOddsRatio(currWeight,learnparam.cvKfold);
-        
-        figure(548);clf
-        for e=1:size(nor,1)
-            scatter(ones(1,length(currWeight))*e,nor(e,:),[],[.8 .8 .8],'filled')
-            semnor = nanstd(nor(e,:))./sqrt(length(nor(e,:)));
-            meannor = nanmean(nor(e,:));
-            hold on; errorbar(e,meannor,semnor,'ko')      
-        end
-        
-        for b = 1:size(nor,2)
-            hold on;plot(1:size(nor,1),nor(:,b),'color',[.8 .8 .8])
-        end
-        
-        
-        hold on; plot(1:size(DmatX,2),mean(nor,2),'-k')
-        hold on;plot([1 size(DmatX,2)],[0 0],'-.k')
-        set(gca,'xlim',[0.75 size(nor,1)+.25],'ylim',[-1 1],'xtick',[1:size(nor,1)],'ytick',-1:.5:1)
-        title(['norm odds for ' params.designvars])
-        
-        [p,~,stats]=anova1(nor',[],'off');
-        pcomp = multcompare(stats,[],'off')
-        
-    end
-    %
-    
+    % Model Outputs; 
+    mdl.build_params = params; %build parameters 
+    mdl.learn_params = learnparam; %model learn parameters
+    mdl.output.weights = weights; %model weights
     
 end
+mdl.build_params.designvars = vars; 
 
 
 %% Psychometric Curve Comparison b/t Model and Mouse
 
-    pfields = fields(motorXpreds);
+    pfields = fields(mdl.output.motor_preds);
     for d = 1:length(pfields)
         featureSelected = d;
         
         %addition of psycho with dropped values 
-        for k = 1:length(U)
-            all_motors = U{k}.meta.motorPosition; 
-            curr_motors = motorXpreds.(pfields{featureSelected}){k}(:,1); 
+        for k = 1:length(BV)
+            all_motors = BV{k}.meta.motorPosition; 
+            curr_motors = mdl.output.motor_preds.(pfields{featureSelected}){k}(:,1); 
             ntt_motors = setdiff(all_motors,curr_motors)'; 
             pad_values = [ntt_motors zeros(length(ntt_motors),1) ones(length(ntt_motors),1) ones(length(ntt_motors),1)*2]; %padding non-touch trials all as 0s meaning non-lick or nogo
-            motorXpreds.(pfields{featureSelected}){k} = [motorXpreds.(pfields{featureSelected}){k} ; pad_values];
+            mdl.output.motor_preds.(pfields{featureSelected}){k} = [mdl.output.motor_preds.(pfields{featureSelected}){k} ; pad_values];
         end
             
-        psycho = rebuildPsychoflip_v2(U,V,motorXpreds.(pfields{featureSelected}));
-        suptitle([U{rec}.meta.layer ' ' pfields{featureSelected} ' ' params.classes])
+        psycho = rebuildPsychoflip_v2(BV,V,mdl.output.motor_preds.(pfields{featureSelected}));
+        suptitle([BV{rec}.meta.layer ' ' pfields{featureSelected} ' ' params.classes])
 %         print(figure(5),'-depsc',['C:\Users\jacheung\Dropbox\LocalizationBehavior\Figures\currentBiologyUpdate\'  U{rec}.meta.layer '_' params.classes '_'  pfields{featureSelected} '_alltouches'])
         
         real = cellfun(@(x) cellfun(@(y) nanmean(y),x), psycho.mouse,'uniformoutput',0);
@@ -210,22 +178,29 @@ title(['pairedTT p= ' num2str(p)])
 %% Visualization of the decision boundaries.
 colors = {'b','r'};
 figure(12+k);clf
-params.designvars = 'counts';
+params.designvars = 'radialD';
 params.classes = 'gonogo';
-
 params.normalization ='none';
+
 for rec = 1:15
-    [DmatX, DmatY, motorX, rnvals] = designMatrixBuilder_v4(V(rec),U{rec},params);
+%     [DmatX, DmatY] = designMatrixBuilder_v4(V(rec),BV{rec},params); dont
+%     need but can infact just use everything from mdl
     nDimX = size(DmatX,2);
     switch nDimX
         case 1
-            
-%             x=linspace(min(DmatX),max(DmatX),15);
-%  x = 0:0.0025:.05 %kappa
-                x = 0:1:15 % counts
-% x=0:25:750 %timing
-%             x=0:4:60 %time to touch
-%                 x = 0:2:40 %angle
+            if strcmp(params.designvars,'kappa')
+                x = 0:0.0025:.05; %kappa
+            elseif strcmp(params.designvars,'counts')
+                x = 0:1:15; % counts
+            elseif strcmp(params.designvars,'timing')
+                x=0:25:750; %timing
+            elseif strcmp(params.designvars,'timeTotouch')
+                x=0:4:60; %time to touch
+            elseif strcmp(params.designvars,'radialD')
+                x = -5:.5:5; %radial distance NORMALIZED
+            elseif strcmp(params.designvars,'angle')
+                x = 0:2:40; %angle
+            end
 
             firstvar = histc(DmatX(DmatY==1),x);
             secondvar = histc(DmatX(DmatY==2),x);
@@ -235,16 +210,13 @@ for rec = 1:15
             hold on;bar(x,secondvar/(sum(firstvar)+sum(secondvar)),colors{2});
 
             for db = [1:2]
-                ms=cell2mat(weights.(params.designvars){rec}.theta);
+                ms=cell2mat(mdl.output.weights.(params.designvars){rec}.theta);
                 coords=mean(reshape(ms(db,:)',2,learnparam.cvKfold),2);
                 y= (exp(coords(1)+coords(2)*x)) ./ (1 + exp(coords(1)+coords(2)*x))  ;
-                y1=train_predOpt(rec);
                 hold on; plot(x,y,['-.' colors{db}]);
-                
-%                 set(gca,'xlim',[min(x) max(x)],'ylim',[0 1]);
-
             end
-%             alpha(.5)
+            
+            alpha(.5)
             set(gca,'xlim',[min(x) max(x)],'ylim',[0 1]);
 
         
@@ -255,7 +227,7 @@ for rec = 1:15
             hold on;scatter(DmatX((DmatY==2),2),DmatX((DmatY==2),1),[],'filled','r')
 %             alpha(.5)
             
-            ms=cell2mat(weights.(params.designvars){rec}.theta);
+            ms=cell2mat(mdl.output.weights.(params.designvars){rec}.theta);
             coords=mean(reshape(ms(1,:)',3,learnparam.cvKfold),2);
         
             plot_x = [min(DmatX(:,2)), max(DmatX(:,2))] ;
@@ -268,7 +240,7 @@ for rec = 1:15
         case 3
             % %ASIDE: Plotting Decision Boundary for 3 variables
             
-            ms=cell2mat(weights.(params.designvars){rec}.theta);
+            ms=cell2mat(mdl.output.weights.(params.designvars){rec}.theta);
             coords=mean(reshape(ms(1,:)',4,learnparam.cvKfold),2);
             
             figure(10);clf
@@ -280,7 +252,7 @@ for rec = 1:15
             
             plot_x = [min(DmatX(:,1))-2, min(DmatX(:,1))-2, max(DmatX(:,1))+2, max(DmatX(:,1))+2]; %ranges for amplitude
             plot_z = [-3 ,3,3,-3];
-            plot_y = (-1/coords(3)) .* (coords(1) + (coords(2).*plot_x) + (coords(4).*plot_z) - log(train_predOpt(rec)/(1-train_predOpt(rec)))); % log p(go trial) to calculate decision boundary
+            plot_y = (-1/coords(3)) .* (coords(1) + (coords(2).*plot_x) + (coords(4).*plot_z) - log(mdl.output.decision_boundary(rec)/(1-mdl.output.decision_boundary(rec)))); % log p(go trial) to calculate decision boundary
             
             hold on; fill3(plot_x, plot_y, plot_z,'k');
             
@@ -296,5 +268,3 @@ for rec = 1:15
     
 end
 suptitle(params.designvars)
-
-print(['C:\Users\jacheung\Dropbox\LocalizationBehavior\Figures\Parts\' params.designvars params.classes],'-depsc')
