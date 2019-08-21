@@ -6,8 +6,8 @@ load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\BV.mat')
 clearvars -except BV V
 
 % vars = {'countsBinary','counts'}; %Fig 3 %BUILD WITH ALL TOUCH DIRECTIONS AND NO drop
-vars = {'kappa','timing','timeTotouch','counts','radialD','angle'}; %FIG4G
-% vars = {'motor','kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %Fig 7
+% vars = {'kappa','timing','timeTotouch','counts','radialD','angle'}; %FIG4G
+vars = {'motor','kappa','timing','timeTotouch','counts','radialD','angle','uberedRadial'}; %Fig 7
 % vars = {'uberedRadial'}; %for supplemental finding out optimal precision of model 
 
 % Fig 9 and BEYOND PROTRACTION ONLY
@@ -28,7 +28,7 @@ for k = 1:length(vars)
     % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
     % 'timeTotouch','onsetangle','velocity','Ivelocity' OR 'phase','amp','midpoint'
     
-    params.classes = 'gonogo';
+    params.classes = 'lick';
     % 1) 'gonogo' 2) 'lick'
     
     % Only for 'ubered' or 'hilbert'
@@ -47,7 +47,7 @@ for k = 1:length(vars)
 
     learnparam.cvKfold = 5;
     learnparam.biasClose = 'no';
-    learnparam.distance_round_pole =2; %inmm
+    learnparam.distance_round_pole =2; %inmm. Only active if biasClose is on. 
     learnparam.numIterations = 20; 
     
     if size(DmatX,2)>1

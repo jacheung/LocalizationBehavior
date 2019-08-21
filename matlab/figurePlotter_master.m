@@ -54,6 +54,22 @@ trialProportion(BV,'all');% can set all to 'pro' or 'ret' for touch direction
 
 
 %% Fig 4
+%Fig 4A-H feature distribution and decision boundary of model across
+%different features
+cd(dataStructLocation)
+load('model_4_trialType.mat')
+variable_options = fields(mdl.input); %list of options available;
+plot_variable = variable_options{1}; %vary feature here
+plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating which feature is available
+
+%Fig 4G scatter of MCC values across all features in trial type prediction
+mcc_scatters(mdl,BV)
+
+%Fig 4H scatter of MCC values across all features in choice prediction
+load('model_4_choice.mat')
+mcc_scatters(mdl,BV)
+
+
 %designMatrix Parameters
 params.designvars = 'angle';
 % 1) 'theta' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
@@ -71,8 +87,6 @@ params.dropNonTouch = 'yes';
 % 2) 'no' = keep all trials
 
 feature_distribution(BV,V,params)
-
-%uber_mccCalculator 
 
 %% Fig 5
 %Fig A/B Lick probability as a function of touch count 
