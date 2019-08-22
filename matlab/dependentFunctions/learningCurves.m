@@ -16,7 +16,7 @@ else
     end
     
     uniqueMouseNames = unique(msnames);
- 
+    
     for j = 1:length(uniqueMouseNames)
         idx=find(msnames==uniqueMouseNames(j));
         fullIdx = find(abs(Motorranges(idx))==min(abs(Motorranges(idx))));
@@ -42,12 +42,11 @@ end
 smoothWindow = 200;
 perfthresh=.75;
 stretch = 1000; %trials to plot post learning threshold
-figure(24);clf
 %-----------------------------
 catmat = nan(numel(learning_struct.mat),50000);
 continuous_catmat = nan(numel(learning_struct.mat),50000);
 non_learned = zeros(1,numel(learning_struct.mat));
-learned_trial_all = zeros(1,numel(learning_struct.mat)); 
+learned_trial_all = zeros(1,numel(learning_struct.mat));
 
 for i = 1:length(learning_struct.mat)
     smoothed = [smooth(learning_struct.mat{i},smoothWindow) ;nan(stretch,1)];
@@ -81,14 +80,14 @@ end
 
 %Plotting for all trials
 forwards = fliplr(catmat);
-figure(24);clf
+figure(26);clf
 subplot(3,1,[1 2])
 plot(1:length(catmat),forwards,'color',[.8 .8 .8])
 xlabel('Trials to expert (thousands)')
 ylabel('Accuracy (%)')
 set(gca,'xlim',[42000 50000],'xtick',[0:1000:50000],'xticklabel',fliplr((0-(stretch/1000):1:50-(stretch/1000))),'ytick',[0:.25:1],'yticklabel',[0:25:100],'ylim',[.25 1])
-hold on; plot(fliplr(continuous_catmat(~non_learned,:))','color','g')
-hold on; plot(fliplr(continuous_catmat(logical(non_learned),:))','color','r')
+% hold on; plot(fliplr(continuous_catmat(~non_learned,:))','color','g') %learning curves for learners
+% hold on; plot(fliplr(continuous_catmat(logical(non_learned),:))','color','r') %learning curves for non-learners
 hold on; plot([0 50000],[perfthresh perfthresh],'-.k') %plotting expert line threshold
 hold on; plot([0 50000],[.5 .5],'-.k') %plotting chance line threshold
 hold on; plot(1:length(catmat),fliplr(nanmean(catmat)),'k')
@@ -96,7 +95,7 @@ hold on; plot(1:length(catmat),fliplr(nanmean(catmat)),'k')
 
 %-----------------------------
 % %Plotting number of trials required to reach learning threshold
-figure(24);subplot(3,1,[3])
+figure(26);subplot(3,1,[3])
 allends = learned_trial_all;
 allends(2) = []; %removing one outlier of 23000 trials
 scatter(allends,ones(1,length(allends)),[],'ko');

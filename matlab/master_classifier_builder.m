@@ -13,7 +13,7 @@ clearvars -except BV V
 % var_set =  {'phase','amp','midpoint','angle'}; %Fig7E
 % var_set = {'countsphase','countsamp','countsmidpoint','countsangle'}; %fig 7FGH
 
-var_set = {'counts','countsmidpoint','countsangle'}; %Fog 7IJ
+var_set = {'countsmidpoint','countsangle'}; %Fog 7IJ
 
 mdl = []; %starting w/ clean structure 
 savedLambdas = nan(length(V),length(var_set));
@@ -26,7 +26,7 @@ for var_set_number = 1:length(var_set)
     % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
     % 'timeTotouch','onsetangle','velocity','Ivelocity' OR 'phase','amp','midpoint'
     
-    params.classes = 'lick';
+    params.classes = 'gonogo';
     % 1) 'gonogo' 2) 'lick'
     
     % Only for 'ubered' or 'hilbert'

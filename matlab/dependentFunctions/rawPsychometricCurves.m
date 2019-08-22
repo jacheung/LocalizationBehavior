@@ -1,5 +1,4 @@
 function [prob,raw] = rawPsychometricCurves(U)
-%varargin = 'semi' or 'cont'.
 
 %outputs a cell array. Each array = 1 session.
 %Column 1 = normalized pole positions. 2 = AVG number of touches. 3 =
@@ -42,7 +41,7 @@ end
 
 %---------------------------------------------------
 % Plotting features 
-figure(10);clf;plot(1:10,flipud(prob{1}(:,3)),'k')
+figure(27);clf;plot(1:10,flipud(prob{1}(:,3)),'k')
 for i = 1:length(prob)
     hold on;plot(1:10,flipud(prob{i}(:,3)),'color',[.8 .8 .8]);
 end

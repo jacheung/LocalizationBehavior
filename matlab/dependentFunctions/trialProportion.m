@@ -57,13 +57,13 @@ for i = 1:length(U)
     
 end
 
-%% Fig 5A
+%% Fig 3G
 xgo     = output.propNoTouchGoLick;
 xnogo   = output.propNoTouchNoGoLick;
 ygo     = output.propTouchGoLick;
 ynogo   = output.propTouchNoGoLick;
 
-figure(5);clf
+figure(37);clf
 
 plot(xgo,ygo,'bo','Linewidth',1)
 hold on

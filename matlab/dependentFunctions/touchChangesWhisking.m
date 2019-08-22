@@ -98,14 +98,13 @@ function [] = touchChangesWhisking(U)
 
 %% PLOTTING
 %Individual plots of whisking numbers 
-figure(340);clf
+figure(331);clf
 for i = 1:length(U)
     
     subplot(5,3,i)
-
     tmp1= histogram(ttprenum{i},0:1:20,'facecolor','b','normalization','probability');
     hold on; tmp2=histogram(nttprenum{i},0:1:20,'facecolor','c','normalization','probability');
-    
+
     probttpre(i,:) = tmp1.Values;
     probnttpre(i,:) = tmp2.Values;
     preKLindiv = kldiv(1:20,probttpre(i,:),probnttpre(i,:));
@@ -137,7 +136,7 @@ popnttpost = cell2mat(nttpostnum');
 preKL = kldiv(1:20,mean(probnttpre),mean(probttpre));
 postKL = kldiv(1:20,mean(probnttpost),mean(probttpost));
 
-figure(341);clf
+figure(33);clf
 histogram(popttpre,0:1:20,'facecolor','b','normalization','probability','facealpha',1)
 hold on;histogram(popnttpre,0:1:20,'facecolor','c','normalization','probability','facealpha',1)
 text(5,.6,num2str(preKL),'fontsize',20,'color','k')
@@ -148,9 +147,10 @@ hold on;plot([20 20],[0 .8],'-k')
 text(25,.6,num2str(postKL),'fontsize',20,'color','k')
 
 set(gca,'xtick',[0 10 20 30],'xticklabel',[0 10 0 10 ],'ylim',[0 .75],'ytick',0:.25:.75)
-suptitle('Population: pretouch | posttouch:lick')
+title('Population: pretouch | posttouch:lick')
 xlabel('number of whisks')
 ylabel('proportion of trials')
+suptitle('Fig 3C')
 
 
 

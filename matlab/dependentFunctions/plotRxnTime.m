@@ -25,7 +25,7 @@ for i  = 1:length(array)
 end
 
 %RXN TIME
-figure(580);clf
+figure(25);clf
 scatter(rxntime,ones(1,length(array)),'markerfacecolor',[.8 .8 .8],'markeredgecolor',[.8 .8 .8]);
 hold on; errorbar(mean(rxntime),1,std(rxntime),'horizontal','ko','markerfacecolor','k','markeredgecolor','k','markersize',20)
 set(gca,'ylim',[.5 1.5],'ytick',[],'xtick',0:250:1250,'xlim',[0 1250])
@@ -34,35 +34,31 @@ xlabel('reaction time (ms)')
 set(gcf, 'Units', 'pixels', 'Position', [250, 250, 500, 200]);
 
 %RXN time X trialoutcome
-figure(581);clf
-color = {'b','k','g','r'};
-for i = 1:length(array)
-    subplot(3,5,i)
-    c_rxn = grxnT{i}; 
-    
-    hit = intersect(find(array{i}.meta.trialType==1), find(array{i}.meta.trialCorrect==1));
-    miss = intersect(find(array{i}.meta.trialType==1), find(array{i}.meta.trialCorrect==0));
-    FA = intersect(find(array{i}.meta.trialType==0), find(array{i}.meta.trialCorrect==0));
-    CR = intersect(find(array{i}.meta.trialType==0), find(array{i}.meta.trialCorrect==1));
-    
-    
-    rxn_mat = nan(max([numel(hit);numel(miss);numel(FA);numel(CR)]),4);
-    rxn_mat(1:length(hit),1) = c_rxn(hit); 
-    rxn_mat(1:length(miss),2) = c_rxn(miss);
-    rxn_mat(1:length(FA),3) = c_rxn(FA);
-    rxn_mat(1:length(CR),4) = c_rxn(CR);
-    
-    for g = [1  3 ]
-        hold on; errorbar(g,nanmean(rxn_mat(:,g)),nanstd(rxn_mat(:,g)),[color{g} 'o']);
-    end
-    set(gca,'xlim',[0 4],'xtick',[1  3 ],'xticklabel',{'hit','fa'})
-    
-    g_rxnmat{i} = rxn_mat; 
-end
+% figure(581);clf
+% color = {'b','k','g','r'};
+% for i = 1:length(array)
+%     subplot(3,5,i)
+%     c_rxn = grxnT{i}; 
+%     
+%     hit = intersect(find(array{i}.meta.trialType==1), find(array{i}.meta.trialCorrect==1));
+%     miss = intersect(find(array{i}.meta.trialType==1), find(array{i}.meta.trialCorrect==0));
+%     FA = intersect(find(array{i}.meta.trialType==0), find(array{i}.meta.trialCorrect==0));
+%     CR = intersect(find(array{i}.meta.trialType==0), find(array{i}.meta.trialCorrect==1));
+%     
+%     
+%     rxn_mat = nan(max([numel(hit);numel(miss);numel(FA);numel(CR)]),4);
+%     rxn_mat(1:length(hit),1) = c_rxn(hit); 
+%     rxn_mat(1:length(miss),2) = c_rxn(miss);
+%     rxn_mat(1:length(FA),3) = c_rxn(FA);
+%     rxn_mat(1:length(CR),4) = c_rxn(CR);
+%     
+%     for g = [1  3 ]
+%         hold on; errorbar(g,nanmean(rxn_mat(:,g)),nanstd(rxn_mat(:,g)),[color{g} 'o']);
+%     end
+%     set(gca,'xlim',[0 4],'xtick',[1  3 ],'xticklabel',{'hit','fa'})
+%     
+%     g_rxnmat{i} = rxn_mat; 
+% end
     
 
-% byTrialType = [mean(cell2mat(cellfun(@nanmedian,g_rxnmat,'uniformoutput',0)')); std(cell2mat(cellfun(@nanmedian,g_rxnmat,'uniformoutput',0)')) ]
-% group = [mean(cellfun(@nanmedian,grxnT)); std(cellfun(@nanmedian,grxnT))]
-% groupv = cellfun(@(x) nanmedian(x(:)),g_rxnmat)
-% cellfun(@(x) sum(~isnan(x)),g_rxnmat,'uniformoutput',0)
 

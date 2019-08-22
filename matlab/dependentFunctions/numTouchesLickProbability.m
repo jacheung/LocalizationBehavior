@@ -90,14 +90,14 @@ end
 gomean = nanmean(goLick,2);
 nogomean = nanmean(nogoLick,2);
 
-figure(8);clf 
+figure(51);clf 
 subplot(1,2,1);
 bar(0:15,nanmean(goTouches,2),'b')
 hold on; bar(0:15,nanmean(nogoTouches,2),'r')
 
 
-hold on;filex_shadedErrorBar(0:15,gomean,gocibins,'b')
-hold on; filex_shadedErrorBar(0:15,nogomean,nogocibins,'r')
+hold on;shadedErrorBar(0:15,gomean,gocibins,'b')
+hold on; shadedErrorBar(0:15,nogomean,nogocibins,'r')
 set(gca,'ytick',0:.5:1,'xtick',0:5:15,'ylim',[0 1],'xlim',[-.5 15.5])
 
 
@@ -128,8 +128,8 @@ gopolemean = nanmean(goPoleLick,2);
 nogopolemean = nanmean(nogoPoleLick,2);
 
 subplot(1,2,2);
-hold on;filex_shadedErrorBar(linspace(-5,5,6),gopolemean,gocibins,'b')
-hold on; filex_shadedErrorBar(linspace(-5,5,6),nogopolemean,nogocibins,'r')
+hold on;shadedErrorBar(linspace(-5,5,6),gopolemean,gocibins,'b')
+hold on; shadedErrorBar(linspace(-5,5,6),nogopolemean,nogocibins,'r')
 axis square
 set(gca,'xlim',[-5 5],'xtick',-5:5:5,'ylim',[0 1],'ytick',0:.5:1)
 

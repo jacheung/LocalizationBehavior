@@ -18,12 +18,13 @@ for i = 1:length(BV)
     
 end
 
-figure;
+figure(35);
 scatter(ones(length(BV),1),tttc,'bo')
 hold on; errorbar(1,mean(tttc),std(tttc)./sqrt(length(BV)),'ko')
 hold on; scatter(ones(length(BV),1)*2,nttc,'ro')
 hold on; errorbar(2,mean(nttc),std(nttc)./sqrt(length(BV)),'ko')
 set(gca,'xtick',[1 2],'xlim',[.5 2.5],'xticklabel',{'go trials','nogo trials'},'ylim',[0 1],'ytick',0:.25:1)
 ylabel('proportion of trials with touch')
+title('Fig 3E')
 
 

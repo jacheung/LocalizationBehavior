@@ -82,9 +82,9 @@ for rec = 1:numel(mdl.input.(plot_variable).DmatX)
             hold on; fill3(plot_x, plot_y, plot_z,'k');
             
             set(gca,'xlim',[min(DmatX(:,1)) max(DmatX(:,1))],'ylim',[min(DmatX(:,2)) max(DmatX(:,2))],'zlim',[min(DmatX(:,3)) max(DmatX(:,3))])
-            if strcmp(params.designvars,'hilbert')
+            if strcmp(mdl.build_params.designvars,'hilbert')
                 xlabel('Amplitude');ylabel('Midpoint');zlabel('Phase')
-            elseif strcmp(params.designvars,'decompTime')
+            elseif strcmp(mdl.build_params.designvars,'decompTime')
                 xlabel('time to touch');ylabel('whisk angle onset');zlabel('velocity')
             end
             

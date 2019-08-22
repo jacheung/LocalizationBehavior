@@ -4,12 +4,19 @@
 % vs Hitrate. Will only work for continuous uber array.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [outputs] = discrimination_precision(U)
+function [outputs] = discrimination_precision(U,displayOpt)
 
+if (nargin < 2), displayOpt = 'on'; end
+willdisplay = ~(strcmp(displayOpt,'nodisplay') | strcmp(displayOpt,'n') ...
+    | strcmp(displayOpt,'off'));
+
+if willdisplay
+    figure(28);clf
+end
 
 popA = cell(1,6);
 p = nan(length(U),6);
-figure(430);clf
+
 for ms = 1:length(U)
     motors = U{ms}.meta.motorPosition;
     ttype = U{ms}.meta.trialType;
@@ -41,16 +48,14 @@ for ms = 1:length(U)
         
         
         popA{d}(ms,:) = [onemmFA onemmHR];
-        
-%         figure(430);subplot(2,5,ms)
-        figure(430);
-        hold on; scatter(onemmFA,onemmHR,'markeredgecolor',colors(d,:));
+        if willdisplay
+            figure(28);
+            hold on; scatter(onemmFA,onemmHR,'markeredgecolor',colors(d,:));
+        end
     end
     plot([0 1],[0 1],'-k')
     xlabel('FA rate');ylabel('Hit rate')
-%     if ms == 5
-%         legend('1mm','2mm','3mm','4mm','5mm')
-%     end
+
 end
 
 % groupPvals
@@ -77,26 +82,27 @@ groupPrecision=cell2mat(cellfun(@mean,popA,'uniformoutput',0)');
     end
 
 
-% figure(431);clf
-figure(430);hold on;
-for i = 1:length(groupPrecision)
-    hold on; 
-    errorbar(groupPrecision(i,1),groupPrecision(i,2),cibin(i,2),cibin(i,2),cibin(i,1),cibin(i,1),'x','Color',colors(i,:),'linewidth',1)
-    
-    scatter(groupPrecision(i,1),groupPrecision(i,2),400,'x','linewidth',2,'markeredgecolor',colors(i,:));
-%     h.CData = colors(i,:);
-    
-    xlabel('FA rate');ylabel('Hit rate')
-    legend off
-end
-set(gca,'ytick',[0 .5 1],'xtick',[0 .5 1],'ylim',[0 1]);
-plot([0 1],[0 1],'-k')
-axis square
+    if willdisplay
+        figure(28);hold on;
+        for i = 1:length(groupPrecision)
+            hold on;
+            errorbar(groupPrecision(i,1),groupPrecision(i,2),cibin(i,2),cibin(i,2),cibin(i,1),cibin(i,1),'x','Color',colors(i,:),'linewidth',1)
+            
+            scatter(groupPrecision(i,1),groupPrecision(i,2),400,'x','linewidth',2,'markeredgecolor',colors(i,:));
+            %     h.CData = colors(i,:);
+            
+            xlabel('FA rate');ylabel('Hit rate')
+            legend off
+        end
+        set(gca,'ytick',[0 .5 1],'xtick',[0 .5 1],'ylim',[0 1]);
+        plot([0 1],[0 1],'-k')
+        axis square
+    end
 
 outputs.means = groupPrecision;
 outputs.errors = cibin;
 
 
 %MATRIX for all pvals 
-pmat = [.5 1 2 3 4 5 ; nan(1,6) ;p ; nan(1,6) ; sum(p<.1) ;sum(p<.05) ; sum(p<.01)]
+pmat = [.5 1 2 3 4 5 ; nan(1,6) ;p ; nan(1,6) ; sum(p<.1) ;sum(p<.05) ; sum(p<.01)];
 

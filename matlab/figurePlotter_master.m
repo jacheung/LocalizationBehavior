@@ -2,11 +2,11 @@
 %%consecutive best performing trials in an object localization task. 
 close all; clear; clc; 
 %% Load behavioral data matrix 
-behavioralDataLocation = 'C:\Users\jacheung\Dropbox\HLabBackup\Jon\DATA\Behavior\ContLearningCurves';
+behavioralDataLocation = 'C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication\localization_task_raw';
+decomposed_behavior_directory = 'C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication\decomposed_task_raw';
 dataStructLocation = 'C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication';
 cd(dataStructLocation)
-load('BV.mat')
-[V] = classifierWrapper_v2(BV,'all','all');
+load('behavioral_structure.mat') 
 
 %% Fig 2 Head-Fixed Task and Performance 
 %Fig 2E reaction time (first touch to first lick) of population
@@ -45,7 +45,7 @@ proportionTTypeTouch(BV)
 
 %Fig 3F Touch presence classifier vs mouse performance 
 cd(dataStructLocation)
-load('model_3F')
+load([dataStructLocation filesep 'model_3F'])
 mcc_scatters(mdl,BV)
 
 %Fig 3G Scatter of proportion of licking|no touch and licking|touch 
@@ -55,8 +55,7 @@ trialProportion(BV,'all');% can set all to 'pro' or 'ret' for touch direction
 %% Fig 4 The Distribution of Sensorimotor Features and Their Utility for Predicting Trial Type and Choice
 %Fig 4A-H feature distribution and decision boundary of model across
 %different features
-cd(dataStructLocation)
-load('model_4_trialType.mat')
+load([dataStructLocation filesep 'model_4_trialType.mat'])
 variable_options = fields(mdl.input); %list of options available;
 plot_variable = variable_options{3}; %vary feature here
 plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating which feature is available
@@ -65,23 +64,8 @@ plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating 
 mcc_scatters(mdl,BV)
 
 %Fig 4H scatter of MCC values across all features in choice prediction
-load('model_4_choice.mat')
+load([dataStructLocation filesep 'model_4_choice.mat'])
 mcc_scatters(mdl,BV)
-
-
-%designMatrix Parameters
-params.designvars = 'angle';
-% 1) 'theta' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
-% 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
-params.classes = 'gonogo';
-% 1) 'gonogo' 2) 'lick'
-% Only for multi-predictor features
-params.normalization = 'meanNorm';
-% 1) 'meanNorm' 2)'none'
-params.dropNonTouch = 'yes';
-% 1) 'yes' = drop trials with no touches
-% 2) 'no' = keep all trials
-feature_distribution(BV,V,params)
 
 %% Fig 5 Mice Discriminate Location Using More Than Touch Count
 %Fig A/B Lick probability as a function of touch count 
@@ -90,13 +74,13 @@ touchOrder = 'all';
 numTouchesLickProbability(BV,touchDirection,touchOrder)
 
 %% Fig 6 Mice Discriminate Location Using Features Correlated to Azimuthal Angle Rather Than Radial Distance
-
-
-
+%uses directory housing behavioral files to generate plots B and D shown 
+% in fig 6 of Cheung et al. 2019
+decomposed_task_behavior(decomposed_behavior_directory)
 
 %% Fig 7 Choice Can Be Best Predicted by a Combination of Touch Count and Whisking Midpoint at Touch
 %fig 7C 
-load('model_7CD.mat') %hilbert vs angle model 
+load([dataStructLocation filesep 'model_7CD.mat']) %hilbert vs angle model 
 variable_options = fields(mdl.input); %list of options available;
 plot_variable = variable_options{2}; %vary feature here
 plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating which feature is available
@@ -105,12 +89,13 @@ plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating 
 mcc_scatters(mdl,BV)
 
 %fig 7E 
-load('model_7E.mat') %hilbert component model 
+load([dataStructLocation filesep 'model_7E.mat']) %hilbert component model 
 mcc_scatters(mdl,BV)
 
 %fig 7F 
-load('model_7FGH.mat') %counts+hilbert component model 
+load([dataStructLocation filesep 'model_7FGH.mat']) %counts+hilbert component model 
 mcc_scatters(mdl,BV)
+
 
 %Fig 7G prediction heat map 
 predictionMatrix = outcomes_heatmap(BV,mdl.output.motor_preds);
@@ -120,3 +105,8 @@ predictionMatrix.columnNames
 outcomes_heatmap_comparator(predictionMatrix)
 
 %Fig 7IJ 
+load([dataStructLocation filesep 'model_7IJ.mat']) %counts, counts+midpoint, counts+angle model 
+[V] = classifierWrapper_v2(BV,'all','all');
+model_psychometric_comparison(mdl,BV,V) %Figure 7I
+model_precision_comparison(mdl,BV) %Figure 7J
+

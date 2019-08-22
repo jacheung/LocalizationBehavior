@@ -92,7 +92,7 @@ end
 
 %% Plotting for whisk features across the population 
 bin = stdbin;
-figure(2);clf
+figure(34);clf
 subplot(3,1,1)
 plot(nanmean(cat(1,mean_theta_go{:})),'bo-')
 hold on; plot(nanmean(cat(1,mean_theta_nogo{:})),'ro-')
@@ -122,4 +122,6 @@ hold on;plot(bin{6}(:,1),'r-');plot(bin{6}(:,2),'r-')
 set(gca,'xlim',[0 10])
 ylabel('Setpoint')
 xlabel('whisk number in trial')
+
+suptitle('Fig 3D')
 
