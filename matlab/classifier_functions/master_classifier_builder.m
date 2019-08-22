@@ -1,5 +1,5 @@
 clear
-load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication\BV.mat')
+load('C:\Users\jacheung\Dropbox\LocalizationBehavior\DataStructs\publication\behavioral_structure.mat')
 [V] = classifierWrapper_v2(BV,'all','all'); %inputs = uberarray | touchDirection | touchOrder
 
 %% PARAMETERS SETTING

@@ -106,7 +106,6 @@ outcomes_heatmap_comparator(predictionMatrix)
 
 %Fig 7IJ 
 load([dataStructLocation filesep 'model_7IJ.mat']) %counts, counts+midpoint, counts+angle model 
-[V] = classifierWrapper_v2(BV,'all','all');
-model_psychometric_comparison(mdl,BV,V) %Figure 7I
+model_psychometric_comparison(mdl,BV) %Figure 7I
 model_precision_comparison(mdl,BV) %Figure 7J
 

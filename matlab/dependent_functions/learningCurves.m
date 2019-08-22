@@ -5,7 +5,7 @@ if exist([behavDataLocation '\' fileName '.mat'],'file')
     load([behavDataLocation '\' fileName '.mat'])
 else
     % wrap all behavioral data files
-    [hist, info, ~] = behav_bdatawrapper(behavDataLocation);
+    [hist, info, ~] = bdatawrapper(behavDataLocation);
     clear O
     
     msnames = ones(length(hist),1);

@@ -67,7 +67,7 @@ for rec = 1:length(uberarray)
     V(rec).var.miss{10} = [cueToTouchMat(miss) miss'];
     
     % FINDING TIMES FROM WHISK ONSET TO TOUCH FOR TOUCHES
-    [hx,FAx,CRx,mx] = uber_touchTimeDecompV2(array,touchOrder);
+    [hx,FAx,CRx,mx] = touchTimeDecomp(array,touchOrder);
     V(rec).var.hit{7} = [hx];
     V(rec).var.FA{7} = [FAx];
     V(rec).var.CR{7} = [CRx];
@@ -94,8 +94,8 @@ for rec = 1:length(uberarray)
     V(rec).trialNums.matrix(2,find(array.meta.trialType == 1 & array.meta.trialCorrect ==0))= 1; %miss trials
     V(rec).trialNums.matrix(3,find(array.meta.trialType == 0 & array.meta.trialCorrect ==0))= 1; % FA trials
     V(rec).trialNums.matrix(4,find(array.meta.trialType == 0 & array.meta.trialCorrect ==1))= 1; %CR trials
-    V(rec).trialNums.matrix(5,:) = sum(V(rec).trialNums.matrix([1 3],:));
-    V(rec).trialNums.matrix(6,:) = sum(V(rec).trialNums.matrix([1 5],:))==2;
+    V(rec).trialNums.matrix(5,:) = sum(V(rec).trialNums.matrix([1 3],:)); %lick trials 
+    V(rec).trialNums.matrix(6,:) = sum(V(rec).trialNums.matrix([1 5],:))==2; %lick and hit trials
     
     
     

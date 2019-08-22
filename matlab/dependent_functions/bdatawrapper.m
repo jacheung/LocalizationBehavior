@@ -1,6 +1,6 @@
 %% bDataWrapper - wraps behavioral data together
 
-function [behaviorHist, behaviorInfo, behaviorTrim] = behav_bdatawrapper(behaviorDir)
+function [behaviorHist, behaviorInfo, behaviorTrim] = bdatawrapper(behaviorDir)
 fileBehavior = dir([behaviorDir filesep '*mat']);
 B = {fileBehavior.name};
 numBArrays = numel(B);

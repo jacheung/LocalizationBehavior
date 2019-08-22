@@ -1,4 +1,4 @@
-function model_psychometric_comparison(mdl,BV,V)
+function model_psychometric_comparison(mdl,BV)
 
 colors = {'g','b'};
 numBins = 10;
@@ -12,8 +12,10 @@ for k = 1:length(pfields)
     cvs = mdl.output.true_preds.(pfields{k});
     
     for rec = 1:length(BV)
+        hits = double(BV{rec}.meta.trialType==1) .* double(BV{rec}.meta.trialCorrect==1);
+        FAs = double(BV{rec}.meta.trialType==0) .* double(BV{rec}.meta.trialCorrect==0);
+        real_choice = sum([hits;FAs]);
         real_motor = BV{rec}.meta.motorPosition;
-        real_choice = V(rec).trialNums.matrix(5,:);
         [real_sorted{rec}] = binslin(normalize_var(real_motor,1,-1),real_choice','equalE',numBins+1,-1,1);
         
         pred_choice = cvs{rec}(:,3)==1; %recoding optimal values for 0 = nogo

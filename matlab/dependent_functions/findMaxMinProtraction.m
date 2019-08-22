@@ -12,7 +12,7 @@ function [P] = findMaxMinProtraction(array,ampthresh,varargin)
 
 %% Find max theta excursion on each whisk cycle
     
-    [objmask]= assist_touchmasks(array);
+    [objmask]= touchmasks(array);
     
     if nargin<3
         mask = ones(size(squeeze(array.S_ctk(1,:,:))));
