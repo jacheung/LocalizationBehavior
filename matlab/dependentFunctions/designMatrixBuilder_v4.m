@@ -54,7 +54,7 @@ switch params.designvars
         varNum=5;
         hx = V.var.hit{varNum}'; FAx = V.var.FA{varNum}'; CRx = V.var.CR{varNum}'; mx = V.var.miss{varNum}';
         
-    case 'kappa'
+    case 'curvature'
         varNum=6;
         hx = V.var.hit{varNum}'; FAx = V.var.FA{varNum}'; CRx = V.var.CR{varNum}'; mx = V.var.miss{varNum}';
    
@@ -112,7 +112,7 @@ switch params.designvars
         CRx = [CRxa CRxm CRxp V.touchNum.CR'];
         mx = [mxa mxm mxp V.touchNum.miss'];
 
-    case 'timing'
+    case 'cueTiming'
         hx = [V.var.hit{10}(:,1) ];
         FAx = [V.var.FA{10}(:,1) ];
         CRx = [V.var.CR{10}(:,1) ];
@@ -150,7 +150,7 @@ switch params.designvars
         CRx = [cellfun(@nanmean,V.var.CR{7}(:,1)) V.touchNum.CR'];
         mx = [cellfun(@nanmean,V.var.miss{7}(:,1)) V.touchNum.miss'];
         
-    case 'timeTotouch'
+    case 'whiskTiming'
         hx = [cellfun(@nanmean,V.var.hit{7}(:,1)) ];
         FAx = [cellfun(@nanmean,V.var.FA{7}(:,1)) ];
         CRx = [cellfun(@nanmean,V.var.CR{7}(:,1)) ];
@@ -167,8 +167,6 @@ switch params.designvars
         FAx = [cellfun(@nanmean,V.var.FA{7}(:,3)) ];
         CRx = [cellfun(@nanmean,V.var.CR{7}(:,3)) ];
         mx = [cellfun(@nanmean,V.var.miss{7}(:,3)) ];
-        
-        
         
     case 'Ivelocity'
         hx = [cellfun(@nanmean,V.var.hit{7}(:,4)) ];
@@ -221,7 +219,7 @@ switch params.designvars
         CRx = [CRxk  V.var.CR{10}(:,1) CRxw  V.touchNum.CR'  CRxt];
         mx = [mxk  V.var.miss{10}(:,1) mxw  V.touchNum.miss'  mxt];
         
-    case 'uberedRadial'
+    case 'combined'
         
         hxt = V.var.hit{1}'; FAxt = V.var.FA{1}'; CRxt = V.var.CR{1}'; mxt = V.var.miss{1}';
         hxk = V.var.hit{6}'; FAxk = V.var.FA{6}'; CRxk = V.var.CR{6}'; mxk = V.var.miss{6}'; %kappa

@@ -12,8 +12,8 @@ function predictionMatrix = outcomes_heatmap(data_array,motorXpreds)
 % Date edited: 190625 by Jonathan Cheung 
 
 %% USING MOTORxPREDS to build a full recreation of predictions for the session
-ttpredMat = cell(15,1); 
-all_trial_mat = cell(15,1); 
+ttpredMat = cell(numel(data_array),1); 
+all_trial_mat = cell(numel(data_array),1); 
 features = fields(motorXpreds);
 preDecisionMask = preDecisionTouchMat(data_array);
 
@@ -114,7 +114,6 @@ for i = 1:length(data_array)
     all_trial_mat{i}(:,end+1) = nttrials';
     
     %ADDING IN RETRACTION-TOUCH TRIALS
-    
     [preD_touches_pro] = preDecisionTouchFeatures(data_array{i},preDecisionMask{i},1,'pro','all');
     [preD_touches_ret] = preDecisionTouchFeatures(data_array{i},preDecisionMask{i},1,'ret','all');
     

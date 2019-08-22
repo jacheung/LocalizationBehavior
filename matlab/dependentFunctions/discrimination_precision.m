@@ -100,8 +100,3 @@ outputs.errors = cibin;
 %MATRIX for all pvals 
 pmat = [.5 1 2 3 4 5 ; nan(1,6) ;p ; nan(1,6) ; sum(p<.1) ;sum(p<.05) ; sum(p<.01)]
 
-% legend('1mm','2mm','3mm','4mm','5mm','location','southeast')
-
-% set(figure(430), 'Units', 'pixels', 'Position', [0, 0, 2000, 1000]);
-% print(figure(430),'-dtiff',['Z:\Users\Jon\Projects\Characterization\BV\Figures\indivPrecision'])
-% print(figure(431),'-dtiff',['Z:\Users\Jon\Projects\Characterization\BV\Figures\groupPrecision'])

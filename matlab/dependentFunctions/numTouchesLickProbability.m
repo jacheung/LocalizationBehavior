@@ -1,9 +1,6 @@
-function numTouchesLickProbability(uberarray)
+function numTouchesLickProbability(uberarray,touchDirection,touchOrder)
 
 preDecisionMask = preDecisionTouchMat(uberarray);
-touchDirection = 'all';
-touchOrder = 'all';
-
 
 for rec = 1:length(uberarray)
     

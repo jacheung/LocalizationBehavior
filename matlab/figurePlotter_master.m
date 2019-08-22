@@ -1,6 +1,5 @@
 %%__main__all analysis below is built off a data structure of 200
 %%consecutive best performing trials in an object localization task. 
-
 close all; clear; clc; 
 %% Load behavioral data matrix 
 behavioralDataLocation = 'C:\Users\jacheung\Dropbox\HLabBackup\Jon\DATA\Behavior\ContLearningCurves';
@@ -9,7 +8,7 @@ cd(dataStructLocation)
 load('BV.mat')
 [V] = classifierWrapper_v2(BV,'all','all');
 
-%% Fig 2
+%% Fig 2 Head-Fixed Task and Performance 
 %Fig 2E reaction time (first touch to first lick) of population
 plotRxnTime(BV)  
 
@@ -22,7 +21,7 @@ rawPsychometricCurves(BV);
 %Fig 2H discrimation precision of the animal 
 discrimination_precision(BV); 
 
-%% Fig 3
+%% Fig 3 Motor Strategy and Its Influence on Patterns of Touch 
 %Fig 3A heatmap of whisker motion (sorted by motor position)
 %can input mouseNumber to plot or variable number
 %variable number :1) angle, :3) amplitude :4) midpoint :5) phase
@@ -53,13 +52,13 @@ mcc_scatters(mdl,BV)
 trialProportion(BV,'all');% can set all to 'pro' or 'ret' for touch direction
 
 
-%% Fig 4
+%% Fig 4 The Distribution of Sensorimotor Features and Their Utility for Predicting Trial Type and Choice
 %Fig 4A-H feature distribution and decision boundary of model across
 %different features
 cd(dataStructLocation)
 load('model_4_trialType.mat')
 variable_options = fields(mdl.input); %list of options available;
-plot_variable = variable_options{1}; %vary feature here
+plot_variable = variable_options{3}; %vary feature here
 plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating which feature is available
 
 %Fig 4G scatter of MCC values across all features in trial type prediction
@@ -74,36 +73,50 @@ mcc_scatters(mdl,BV)
 params.designvars = 'angle';
 % 1) 'theta' 2) 'hilbert' (phase amp midpoint) 3) 'counts' 4) 'ubered'
 % 5) 'timing' 6) 'motor' 7) 'decompTime' OR ,'kappa'
-
 params.classes = 'gonogo';
 % 1) 'gonogo' 2) 'lick'
-
 % Only for multi-predictor features
 params.normalization = 'meanNorm';
 % 1) 'meanNorm' 2)'none'
-
 params.dropNonTouch = 'yes';
 % 1) 'yes' = drop trials with no touches
 % 2) 'no' = keep all trials
-
 feature_distribution(BV,V,params)
 
-%% Fig 5
+%% Fig 5 Mice Discriminate Location Using More Than Touch Count
 %Fig A/B Lick probability as a function of touch count 
 touchDirection = 'all';
 touchOrder = 'all';
 numTouchesLickProbability(BV,touchDirection,touchOrder)
 
-%% Fig 6 Radial distance feature isolation task 
+%% Fig 6 Mice Discriminate Location Using Features Correlated to Azimuthal Angle Rather Than Radial Distance
 
 
 
 
-%% Fig 7
+%% Fig 7 Choice Can Be Best Predicted by a Combination of Touch Count and Whisking Midpoint at Touch
+%fig 7C 
+load('model_7CD.mat') %hilbert vs angle model 
+variable_options = fields(mdl.input); %list of options available;
+plot_variable = variable_options{2}; %vary feature here
+plot_decision_boundary(mdl,plot_variable) %plot variable is a string indicating which feature is available
+
+%fig 7D
+mcc_scatters(mdl,BV)
+
+%fig 7E 
+load('model_7E.mat') %hilbert component model 
+mcc_scatters(mdl,BV)
+
+%fig 7F 
+load('model_7FGH.mat') %counts+hilbert component model 
+mcc_scatters(mdl,BV)
 
 %Fig 7G prediction heat map 
-predictionMatrix = outcomes_heatmap(BV,motorXpreds);
+predictionMatrix = outcomes_heatmap(BV,mdl.output.motor_preds);
+predictionMatrix.columnNames
 
 %Fig 7H prediction heat map comaparison
 outcomes_heatmap_comparator(predictionMatrix)
 
+%Fig 7IJ 
