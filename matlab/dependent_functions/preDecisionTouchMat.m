@@ -1,4 +1,4 @@
-function [preDecisionTouchIdx] = preDecisionTouchMat(U)
+function [preDecisionTouchIdx, lickMask] = preDecisionTouchMat(U)
 
 %preDecision Touches
 preDecisionTouchIdx = cell(length(U),1);
