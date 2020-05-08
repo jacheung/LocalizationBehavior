@@ -1,12 +1,12 @@
-@@ -0,0 +1,157 @@
+import preprocessing
+
+
 import scipy.io as sio
 import numpy as np
-import matplotlib as mpl
 import scipy.signal as sis
 import sklearn as skl
 from sklearn import linear_model
-mpl.use('TkAgg')
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import copy
 
 class bdatawrapper:
@@ -103,7 +103,7 @@ class bdatawrapper:
 U={}
 
 for y in range(1, 11):
-    dirAd = f"/Users/jonathancheung/Dropbox/pythonSandbox/ms{y}.mat"
+    dirAd = f"/Users/jonathancheung/Documents/Github/LocalizationBehavior/python/dataStructs/ms{y}.mat"
     b_dat = sio.loadmat(dirAd)
     currMsDat = b_dat['ms']
     S_ctk = currMsDat[0, 0:16]
@@ -112,6 +112,7 @@ for y in range(1, 11):
     ttype_mat = np.reshape(ttype_mat_tmp, (4, currMsDat[0, 1].shape[1]))
     U[f'ms{y}'] = bdatawrapper(S_ctk, R_ntk, ttype_mat)
 
+return U
 
 ## logistic classifier to predict touch
 mouseNum = 10
@@ -144,7 +145,7 @@ peaks,troughs = U['ms1'].whisking_peaks_and_troughs()
 preD_window = U['ms1'].predecision_window()
 plot_angles = angle*preD_window
 peak_times = np.where(peaks[:,0]==1)
-trough_times = np.where(troughs[:,0]==1)
+trough_times = np.where(troughs[:,0]==1)[0]
 plt.close()
 plt.plot(angle[:,0],color='gray')
 plt.scatter(peak_times,plot_angles[peak_times,0],color='red')
