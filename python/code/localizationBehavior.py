@@ -1,4 +1,4 @@
-import preprocessing
+from data import preprocessing
 
 
 import scipy.io as sio
