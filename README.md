@@ -7,7 +7,7 @@ Head-fixed rodents are a powerful model to study tactile perception due to the f
 
 In the context of precise object localization, 6 plausible models have been hypothesized over the past decade (see below). We seek in this project to discern the simplest model to provide a foundation for the computation of object location representation in the cortex. 
 
-![Alt text](./pictures/localization_models.png)
+![Localization models](./pictures/localization_models.png)
 
 ## Data Availability:
 Data structure for Cheung et al. 2019 hosted on Hires Lab Dropbox at (https://www.dropbox.com/s/0oxsc4uix5zd9dl/BV.mat).
